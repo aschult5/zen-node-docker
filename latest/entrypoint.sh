@@ -218,13 +218,15 @@ if [ ! "$USER_ID" == "0"  ]; then
     if [[ "$1" == zend ]]; then
         /usr/local/bin/gosu user zen-fetch-params
         exec /usr/local/bin/gosu user /bin/bash -c "$@ $OPTS"
+    else
+        exec /usr/local/bin/gosu user "$@"
     fi
-    exec /usr/local/bin/gosu user "$@"
 else
     if [[ "$1" == zend ]]; then
         zen-fetch-params
         exec /bin/bash -c "$@ $OPTS"
+    else
+        exec "$@"
     fi
-    exec "$@"
 fi
 
