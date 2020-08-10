@@ -72,7 +72,7 @@ if ! grep -q 'rpcpassword' $HOME/.zen/testnet3/zen.conf ; then
 fi
 
 # Prepend some default command line options to OPTS, user provided values will be appended and take precedence.
-export OPTS="-listenonion=0 $OPTS"
+export OPTS="-listenonion=0 -daemon=0 $OPTS"
 
 # Logging to stdout or debug.log
 if [[ -v LOG ]] && [ "$LOG" == "STDOUT" ]; then
@@ -218,13 +218,15 @@ if [ ! "$USER_ID" == "0"  ]; then
     if [[ "$1" == zend ]]; then
         /usr/local/bin/gosu user zen-fetch-params
         exec /usr/local/bin/gosu user /bin/bash -c "$@ $OPTS"
+    else
+        exec /usr/local/bin/gosu user "$@"
     fi
-    exec /usr/local/bin/gosu user "$@"
 else
     if [[ "$1" == zend ]]; then
         zen-fetch-params
         exec /bin/bash -c "$@ $OPTS"
+    else
+        exec "$@"
     fi
-    exec "$@"
 fi
 
